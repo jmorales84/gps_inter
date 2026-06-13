@@ -2,17 +2,26 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface2: #22263a;
-  --accent: #3b82f6;
-  --accent2: #22d3ee;
+  /* ===== BASE (Google Maps style dark + limpio) ===== */
+  --bg: #0b0f14;              /* fondo más neutro tipo Maps dark */
+  --surface: #141a22;        /* panel principal */
+  --surface2: #1c2430;       /* inputs/cards */
+  --accent: #4285F4;         /* azul Google Maps */
+  --accent2: #00c2a8;        /* teal moderno */
+  --mauve: #c084fc;
+  --violet: #7c3aed;
   --danger: #ef4444;
   --warn: #f59e0b;
   --green: #22c55e;
-  --text: #e8eaf0;
-  --muted: #7c8db0;
-  --border: #2e3350;
+
+  /* ===== TEXTOS ===== */
+  --text: #e6eaf2;
+  --muted: #8b97ad;
+
+  /* ===== BORDES ===== */
+  --border: #2a3442;
+
+  /* ===== UI ===== */
   --radius: 12px;
   --sidebar-w: 340px;
 }
@@ -139,7 +148,10 @@ body { display: flex; }
   transition: all 0.2s;
 }
 .vehicle-btn span { font-size: 10px; font-family: 'Inter', sans-serif; }
-.vehicle-btn.active { border-color: var(--accent); background: rgba(59,130,246,0.15); color: var(--text); }
+.vehicle-btn.active {
+  border-color: var(--accent2);
+  background: rgba(0, 194, 168, 0.15);
+}
 .vehicle-btn:hover:not(.active) { border-color: var(--border); background: var(--surface); }
 
 /* ===== TIME GRID ===== */
@@ -178,7 +190,9 @@ body { display: flex; }
 .search-btn {
   width: 100%;
   padding: 13px;
-  background: linear-gradient(135deg, var(--accent), #1d4ed8);
+  .search-btn {
+  background: linear-gradient(135deg, var(--accent), var(--violet));
+}
   border: none;
   border-radius: var(--radius);
   color: white;
@@ -202,10 +216,7 @@ body { display: flex; }
 .fuel-bar { flex: 1; height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; }
 
 .fuel-fill {
-  height: 100%;
-  border-radius: 4px;
-  background: linear-gradient(90deg, var(--warn), var(--green));
-  transition: width 0.3s;
+  background: linear-gradient(90deg, var(--accent2), var(--violet));
 }
 
 #fuelPercent { font-size: 12px; font-weight: 600; color: var(--text); min-width: 32px; }
