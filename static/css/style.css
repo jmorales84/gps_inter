@@ -1,78 +1,71 @@
-/* =====================================================================
-   GPS INT — Design System v4
-   Spirit: Google Maps Night × studio palette
-   Paleta: Teal · Mauve · Violet · Rose + Google primaries
-   Firma: píldoras de color en labels + glow activo en inputs
-   ===================================================================== */
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* ── Tokens ─────────────────────────────────────────────────────────── */
 :root {
 
-  /* Fondos — escala de profundidad */
-  --bg:       #0d1117;   /* Maps dark — casi negro azulado            */
-  --surf:     #161b26;   /* superficie base del sidebar               */
-  --surf2:    #1e2639;   /* cards, inputs                             */
-  --surf3:    #252f45;   /* hover / elevado                           */
-  --surf4:    #2c3852;   /* seleccionado / activo                     */
+  /* ===== FONDOS ===== */
+  --bg:       #dfe4df;   /* fondo general */
+  --surf:     #e3d9cf;   /* sidebar */
+  --surf2:    #d2decc;   /* cards */
+  --surf3:    #acbba8;   /* hover */
+  --surf4:    #aeb8ae;   /* activo */
 
-  /* ── Paleta de acento ─────────────────────────────────────────────── */
+  /* ===== PALETA DE LA IMAGEN ===== */
 
-  /* Teal — ruta principal, links, foco de origen */
-  --teal:        #2dd4bf;
-  --teal-dim:    #0f9688;
-  --teal-glow:   rgba(45,212,191,.16);
-  --teal-border: rgba(45,212,191,.28);
+  /* Verde menta */
+  --teal:        #9bbe95;
+  --teal-dim:    #8eae89;
+  --teal-glow:   rgba(179,210,174,.25);
+  --teal-border: rgba(179,210,174,.45);
 
-  /* Mauve — tiempo, zona horaria, datos pasivos */
-  --mauve:       #c084fc;
-  --mauve-dim:   #9046d8;
-  --mauve-glow:  rgba(192,132,252,.14);
-  --mauve-border:rgba(192,132,252,.26);
+  /* Verde salvia */
+  --mauve:       #98a995;
+  --mauve-dim:   #8f9f8b;
+  --mauve-glow:  rgba(168,184,165,.25);
+  --mauve-border:rgba(168,184,165,.45);
 
-  /* Violet — botón primario, algoritmo, selección */
-  --violet:      #818cf8;
-  --violet-dim:  #4f46e5;
-  --violet-glow: rgba(129,140,248,.16);
-  --violet-border:rgba(129,140,248,.28);
+  /* Lavanda */
+  --violet:      #a895a8;
+  --violet-dim:  #8f7c90;
+  --violet-glow: rgba(168,149,168,.25);
+  --violet-border: rgba(168,149,168,.45);
 
-  /* Rose — alertas, peligro, zonas rojas */
-  --rose:        #fb7185;
-  --rose-dim:    #e11d48;
-  --rose-glow:   rgba(251,113,133,.13);
-  --rose-border: rgba(251,113,133,.26);
+  /* Ciruela */
+  --rose:        #8d657e;
+  --rose-dim:    #755266;
+  --rose-glow:   rgba(141,101,126,.25);
+  --rose-border: rgba(141,101,126,.45);
 
-  /* Google primaries (botón calcular, acento Maps) */
-  --g-blue:   #4285f4;
-  --g-blue2:  #1a73e8;
-  --g-red:    #ea4335;
-  --g-yellow: #fbbc05;
-  --g-green:  #34a853;
+  /* Morado profundo */
+  --g-blue:      #8d657e;
+  --g-blue2:     #604c5c;
+  --g-red:       #8d657e;
+  --g-yellow:    #c5b2c4;
+  --g-green:     #b3d2ae;
 
-  /* Semánticos */
-  --danger:  var(--rose);
-  --warn:    #f59e0b;
-  --success: #34d399;
+  /* ===== SEMÁNTICOS ===== */
+  --danger:  #c46a7b;
+  --warn:    #b891a9;
+  --success: #8eb88a;
 
-  /* Texto */
-  --text:     #e2e8f8;
-  --text-sub: #8fa3c4;
-  --text-dim: #4e6080;
+  /* ===== TEXTO ===== */
+  --text:     #3b3d44;
+  --text-sub: #60666d;
+  --text-dim: #848b93;
 
-  /* Bordes */
-  --border:  #1e2d45;
-  --border2: #263550;
+  /* ===== BORDES ===== */
+  --border:  #c9cec8;
+  --border2: #b7bcb6;
 
-  /* Forma */
-  --radius:    13px;
-  --radius-sm: 9px;
+  /* ===== FORMAS ===== */
+  --radius:    14px;
+  --radius-sm: 10px;
   --sidebar-w: 344px;
 
-  /* Sombras */
-  --sh-sm: 0 2px 10px rgba(0,0,0,.45);
-  --sh-md: 0 4px 24px rgba(0,0,0,.60);
-  --sh-lg: 0 8px 48px rgba(0,0,0,.75);
+  /* ===== SOMBRAS ===== */
+  --sh-sm: 0 2px 8px rgba(96,76,92,.08);
+  --sh-md: 0 8px 24px rgba(96,76,92,.12);
+  --sh-lg: 0 16px 40px rgba(96,76,92,.18);
 }
 
 /* ── Base ───────────────────────────────────────────────────────────── */
@@ -87,17 +80,16 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 body { display: flex; }
-
-
-/* ====================================================================
-   MAPA
-   ==================================================================== */
 .map-container { flex: 1; position: relative; }
-#map { width: 100%; height: 100vh; background: var(--bg); }
+#map { width: 100%; height: 100vh; background:#9a8ea6; }
 
 /* Tono Maps Night — ligeramente más azulado que el stock */
 .leaflet-tile {
-  filter: brightness(.65) saturate(.60) hue-rotate(195deg);
+  filter:
+    brightness(.92)
+    saturate(.85)
+    contrast(1.02)
+    hue-rotate(15deg);
 }
 
 /* Controles zoom al estilo Maps */
@@ -116,7 +108,9 @@ body { display: flex; }
 .sidebar {
   width: var(--sidebar-w);
   height: 100vh;
-  background: var(--surf);
+  background: rgba(236,233,230,.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(18px);
   border-right: 1px solid var(--border);
   overflow-y: auto;
   overflow-x: hidden;
@@ -237,9 +231,12 @@ body { display: flex; }
 .input-wrapper { position: relative; }
 
 /* Base input */
-.input-wrapper input[type="text"],
-.input-group input[type="time"],
+.input-wrapper input,
 .input-group select,
+.input-group input[type="time"] {
+  background: #f4f2ef;
+  border: 1px solid var(--border2);
+}
 .input-group input[type="text"] {
   width: 100%;
   padding: 9px 13px;
@@ -348,17 +345,8 @@ body { display: flex; }
   border-color: var(--border2);
   color: var(--text);
 }
-
-
-/* ====================================================================
-   TIME GRID
-   ==================================================================== */
 .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-
-/* ====================================================================
-   TOGGLES
-   ==================================================================== */
 .options-group { display: flex; flex-direction: column; gap: 11px; }
 
 .toggle-option {
@@ -379,8 +367,6 @@ body { display: flex; }
   flex-shrink: 0;
 }
 .toggle-option input { display: none; }
-
-/* Toggle activo con violet */
 .toggle-option input:checked + .toggle-track {
   background: var(--violet);
   border-color: var(--violet);
@@ -393,38 +379,52 @@ body { display: flex; }
   position: absolute;
   top: 2.5px; left: 2.5px;
   transition: transform .2s cubic-bezier(.4,0,.2,1);
-  box-shadow: 0 1px 4px rgba(0,0,0,.35);
+  box-shadow: 0 1px 4px rgba(125, 118, 123, 0.974);
 }
 .toggle-option input:checked + .toggle-track .toggle-thumb {
   transform: translateX(16px);
 }
-
-
-/* ====================================================================
-   SEARCH BUTTON
-   ==================================================================== */
 .search-btn {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(
-    135deg,
-    var(--g-blue)  0%,
-    #3b6fe0        45%,
-    var(--g-blue2) 100%
-  );
+
+  background: #8d657e; /* Ciruela */
   border: none;
   border-radius: var(--radius-sm);
+
   color: white;
   font-size: 13.5px;
   font-weight: 700;
   font-family: 'Space Grotesk', sans-serif;
+
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
   letter-spacing: .03em;
-  transition: opacity .18s, transform .12s, box-shadow .18s;
-  box-shadow: 0 2px 14px rgba(66,133,244,.40);
+  transition: background .18s, transform .12s, box-shadow .18s;
+
+  box-shadow: 0 8px 20px rgba(141,101,126,.20);
+
   position: relative;
   overflow: hidden;
+}
+
+.search-btn:hover {
+  background: #765367; /* tono más oscuro */
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(141,101,126,.28);
+}
+
+.search-btn:active {
+  transform: translateY(0);
+}
+
+.search-btn.loading {
+  opacity: .60;
+  pointer-events: none;
 }
 /* Brillo interno */
 .search-btn::after {
@@ -434,7 +434,7 @@ body { display: flex; }
   border-radius: inherit;
   pointer-events: none;
 }
-.search-btn:hover  { opacity: .92; transform: translateY(-1px); box-shadow: 0 4px 22px rgba(66,133,244,.55); }
+.search-btn:hover  { opacity: .92; transform: translateY(-1px); box-shadow: 0 4px 22px rgba(76, 101, 143, 0.826); }
 .search-btn:active { transform: translateY(0); }
 .search-btn.loading { opacity: .60; pointer-events: none; }
 
@@ -490,8 +490,6 @@ body { display: flex; }
   color: #fda4af;
   line-height: 1.4;
 }
-
-
 /* ====================================================================
    SIDEBAR DIVIDER
    ==================================================================== */
@@ -500,8 +498,6 @@ body { display: flex; }
   background: linear-gradient(90deg, transparent, var(--border2), transparent);
   margin: 2px -15px;
 }
-
-
 /* ====================================================================
    MENU TOGGLE (mobile)
    ==================================================================== */
@@ -520,15 +516,14 @@ body { display: flex; }
 }
 .menu-toggle:hover { background: var(--surf3); }
 
-
-/* ====================================================================
-   INFO PANEL
-   ==================================================================== */
 .info-panel {
   position: absolute;
   bottom: 18px; right: 14px;
   width: 316px;
-  background: var(--surf);
+  .info-panel {
+  background: rgba(236,233,230,.95);
+  backdrop-filter: blur(14px);
+}
   border: 1px solid var(--border2);
   border-radius: 16px;
   padding: 0 0 14px;
@@ -542,8 +537,6 @@ body { display: flex; }
 }
 .info-panel::-webkit-scrollbar { width: 3px; }
 .info-panel::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
-
-/* Barra multicolor en la cima del panel — firma visual */
 .info-panel-bar {
   height: 4px;
   flex-shrink: 0;
@@ -579,9 +572,6 @@ body { display: flex; }
   transition: color .15s, background .15s;
 }
 .close-info:hover { color: var(--text); background: var(--surf3); }
-
-
-/* ── Stat Cards ─────────────────────────────────────────────────────── */
 .info-stats {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 7px;
@@ -589,6 +579,13 @@ body { display: flex; }
 }
 
 .stat-card {
+  background: linear-gradient(
+  145deg,
+  rgba(255,255,255,.03),
+  rgba(255,255,255,.01)
+);
+
+backdrop-filter: blur(12px);
   background: var(--surf2);
   border-radius: 10px;
   padding: 10px 11px;
@@ -597,8 +594,6 @@ body { display: flex; }
   position: relative;
   overflow: hidden;
 }
-
-/* Línea superior con el color asignado a cada métrica */
 .stat-card::before {
   content: '';
   position: absolute; left: 0; top: 0; right: 0;
@@ -629,9 +624,6 @@ body { display: flex; }
   font-size: 9px; text-transform: uppercase;
   letter-spacing: .07em; color: var(--text-dim);
 }
-
-
-/* ── Secciones del panel ─────────────────────────────────────────────── */
 .panel-section,
 .alt-routes,
 .tolls-detail,
@@ -650,8 +642,6 @@ body { display: flex; }
   display: flex; align-items: center; gap: 5px;
 }
 
-
-/* ── Rutas alternativas ────────────────────────────────────────────── */
 .alt-route-item {
   display: flex; align-items: center; justify-content: space-between;
   padding: 8px 10px;
@@ -711,10 +701,6 @@ body { display: flex; }
 .arrival-row span   { color: var(--text-sub); }
 .arrival-row strong { color: var(--teal); }
 
-
-/* ====================================================================
-   LEYENDA
-   ==================================================================== */
 .legend {
   position: absolute;
   bottom: 18px; left: 14px;
@@ -747,8 +733,13 @@ body { display: flex; }
 .leaflet-popup-tip          { background: var(--surf2) !important; }
 .leaflet-popup-content      { margin: 10px 14px; font-size: 12.5px; }
 .leaflet-popup-close-button { color: var(--text-sub) !important; }
-
-
+.leaflet-tile {
+  filter:
+    brightness(.95)
+    saturate(.80)
+    hue-rotate(15deg)
+    contrast(1.02);
+}
 /* ====================================================================
    SPINNER
    ==================================================================== */

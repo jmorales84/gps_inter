@@ -220,15 +220,18 @@ document.getElementById('useMyLocation').addEventListener('click', () => {
     originCoords = { ...userLocation, name: 'Mi ubicación', state: '', country: 'MX' };
     document.getElementById('originInput').value = 'Mi ubicación actual';
     placeOriginMarker(userLocation.lat, userLocation.lng);
-    map.setView([userLocation.lat, userLocation.lng], 13);
-    showToast('✅ Ubicación obtenida');
-  }, () => {
-    userLocation = { lat:19.4326, lng:-99.1332 };
-    originCoords = { ...userLocation, name: 'Ciudad de México (por defecto)', state:'CDMX', country:'MX' };
-    document.getElementById('originInput').value = 'Ciudad de México (por defecto)';
-    placeOriginMarker(userLocation.lat, userLocation.lng);
-    map.setView([userLocation.lat, userLocation.lng], 11);
-    showToast('⚠️ Usando CDMX como ubicación por defecto');
+    map.setView([userLocation.lat, userLocation.lng], 15);
+    showToast(`✅ Ubicación obtenida (precisión: ${Math.round(pos.coords.accuracy)}m)`);
+  }, (err) => {
+    let msg = '⚠️ No se pudo obtener ubicación';
+    if (err.code === 1) msg = '❌ Permiso de ubicación denegado. Actívalo en tu navegador.';
+    else if (err.code === 2) msg = '⚠️ Ubicación no disponible. Verifica tu GPS o red.';
+    else if (err.code === 3) msg = '⚠️ Tiempo de espera agotado. Intenta de nuevo.';
+    showToast(msg);
+  }, {
+    enableHighAccuracy: true,
+    timeout: 15000,
+    maximumAge: 0
   });
 });
 
@@ -312,6 +315,34 @@ document.getElementById('searchBtn').addEventListener('click', async () => {
       const realGeometry = await getRealRoute(originCoords, destCoords);
       result.realGeometry = realGeometry;
 
+      // Geometrías reales para alternativas usando puntos de paso desplazados
+      const latDiff = destCoords.lat - originCoords.lat;
+      const lngDiff = destCoords.lng - originCoords.lng;
+      const dist = Math.sqrt(latDiff*latDiff + lngDiff*lngDiff);
+
+      // Via-point alt 1: desplazado perpendicular hacia el norte/este
+      const viaAlt1 = {
+        lat: (originCoords.lat + destCoords.lat) / 2 + (-lngDiff / dist) * 0.8,
+        lng: (originCoords.lng + destCoords.lng) / 2 + (latDiff / dist) * 0.8,
+      };
+      // Via-point alt 2: desplazado perpendicular hacia el sur/oeste
+      const viaAlt2 = {
+        lat: (originCoords.lat + destCoords.lat) / 2 + (lngDiff / dist) * 0.8,
+        lng: (originCoords.lng + destCoords.lng) / 2 + (-latDiff / dist) * 0.8,
+      };
+
+      const [altGeo1, altGeo2] = await Promise.allSettled([
+        getRealRoute(originCoords, destCoords, viaAlt1),
+        getRealRoute(originCoords, destCoords, viaAlt2),
+      ]);
+
+      if (result.alternatives[0]) {
+        result.alternatives[0].realGeometry = altGeo1.status === 'fulfilled' ? altGeo1.value : null;
+      }
+      if (result.alternatives[1]) {
+        result.alternatives[1].realGeometry = altGeo2.status === 'fulfilled' ? altGeo2.value : null;
+      }
+
       // Calcular casetas solo si la ruta pasa por México
       const isMexicanRoute = isRouteInMexico(originCoords, destCoords);
       if (isMexicanRoute && !options.avoidTolls) {
@@ -353,10 +384,17 @@ function formatFuelCost(liters, fuel) {
   return { text: `${fuel.symbol}${(liters * fuel.priceUSD).toFixed(0)} ${fuel.currency}`, liters };
 }
 
-async function getRealRoute(origin, dest) {
+async function getRealRoute(origin, dest, viaPoint = null) {
+  let coords;
+  if (viaPoint) {
+    coords = `${origin.lng},${origin.lat};${viaPoint.lng},${viaPoint.lat};${dest.lng},${dest.lat}`;
+  } else {
+    coords = `${origin.lng},${origin.lat};${dest.lng},${dest.lat}`;
+  }
+
   const url =
     `https://router.project-osrm.org/route/v1/driving/` +
-    `${origin.lng},${origin.lat};${dest.lng},${dest.lat}` +
+    coords +
     `?overview=full&geometries=geojson`;
 
   const response = await fetch(url);
@@ -383,9 +421,12 @@ function drawRouteOnMap(result, origin, dest) {
   routeLayers.push(mainLine);
 
   result.alternatives.forEach((alt, i) => {
+    const altWps = alt.realGeometry
+      ? alt.realGeometry.map(coord => [coord[1], coord[0]])
+      : alt.waypoints.map(wp => [wp.lat, wp.lng]);
     const altLine = L.polyline(
-      alt.waypoints.map(wp => [wp.lat, wp.lng]),
-      { color: i === 0 ? '#6366f1' : '#84cc16', weight: 3, opacity: 0.45, dashArray: '8,5' }
+      altWps,
+      { color: i === 0 ? '#6366f1' : '#84cc16', weight: 3, opacity: 0.55, dashArray: '8,5' }
     ).addTo(map);
     routeLayers.push(altLine);
   });
